@@ -3,11 +3,20 @@ package mobi.duckseason.cowgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 public class GameScreen implements Screen {
-
+	private static int WIDTH = 960;
+	private static int HEIGHT = 540;
+	
+	private Stage stage;
+	
 	public GameScreen() {
-		// TODO Auto-generated constructor stub
+		ScalingViewport v = new ScalingViewport(Scaling.stretch, WIDTH, HEIGHT);
+		stage = new Stage(v);
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
@@ -20,6 +29,12 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		//make the stage do all the processing needed
+		stage.act(delta);
+		
+		//draw the stage
+		stage.draw();
 
 	}
 
