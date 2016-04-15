@@ -32,6 +32,7 @@ public class GameScreen implements Screen {
 	private Sound moo = Gdx.audio.newSound(Gdx.files.internal("moo.mp3"));
 	private Sound boom = Gdx.audio.newSound(Gdx.files.internal("boom.mp3"));
 	private Timer.Task createBombsTask;
+	private boolean playing = true;
 	
 	public GameScreen() {
 		ScalingViewport v = new ScalingViewport(Scaling.stretch, WIDTH, HEIGHT);
@@ -177,6 +178,21 @@ public class GameScreen implements Screen {
 		
 		//draw the stage
 		stage.draw();
+		
+		//check for game over conditions
+		if(playing ) {
+			for(Actor actor : stage.getActors())
+				if(actor instanceof Bomb) {
+					Bomb bomb = (Bomb) actor;
+					if(cow.getBounds().overlaps(bomb.getBounds())){
+						playing = false;
+						
+						break;
+					}
+				}
+			if(!playing)
+				finishGame();
+		}
 
 	}
 
