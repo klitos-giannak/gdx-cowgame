@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
@@ -39,6 +40,28 @@ public class GameScreen implements Screen {
 		cow = new Cow();
 		cow.setX( (stage.getWidth()-cow.getWidth())/2 );
 		stage.addActor(cow);
+		
+		cow.addAction(createCowWelcomeAnim());
+	}
+
+	private SequenceAction createCowWelcomeAnim() {
+		SequenceAction sAction =  new SequenceAction();
+		
+		//enlarge cow anim
+		//The position of the cow remains counted from bottom left corner
+		//so we need to move the cow to the left in order to keep the anim centered
+		ParallelAction p1Action = new ParallelAction();
+		p1Action.addAction(Actions.scaleTo(2f, 2f, 0.2f));
+		p1Action.addAction(Actions.moveBy(-cow.getWidth()/2, 0, 0.2f));
+		sAction.addAction(p1Action);
+		
+		//normal size anim
+		//likewise we move the cow to the right as we shrink it
+		ParallelAction p2Action = new ParallelAction();
+		p2Action.addAction(Actions.scaleTo(1f, 1f, 0.8f));
+		p2Action.addAction(Actions.moveBy(cow.getWidth()/2, 0, 0.8f));
+		sAction.addAction(p2Action);
+		return sAction;
 	}
 
 	private Bomb createBombActor() {
