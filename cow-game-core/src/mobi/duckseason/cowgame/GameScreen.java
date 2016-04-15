@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,6 +22,9 @@ public class GameScreen implements Screen {
 	
 	private Stage stage;
 	private Cow cow;
+
+	//initialize a Sound. Mp3 file needs to be in the assets directory
+	private Sound moo = Gdx.audio.newSound(Gdx.files.internal("moo.mp3"));
 	
 	public GameScreen() {
 		ScalingViewport v = new ScalingViewport(Scaling.stretch, WIDTH, HEIGHT);
@@ -42,6 +46,8 @@ public class GameScreen implements Screen {
 		stage.addActor(cow);
 		
 		cow.addAction(createCowWelcomeAnim());
+		//play a sound with the animation
+		moo.play();
 	}
 
 	private SequenceAction createCowWelcomeAnim() {
