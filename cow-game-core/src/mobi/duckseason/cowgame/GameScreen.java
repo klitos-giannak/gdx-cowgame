@@ -19,6 +19,7 @@ public class GameScreen implements Screen {
 	private static int HEIGHT = 540;
 	
 	private Stage stage;
+	private Cow cow;
 	
 	public GameScreen() {
 		ScalingViewport v = new ScalingViewport(Scaling.stretch, WIDTH, HEIGHT);
@@ -30,8 +31,16 @@ public class GameScreen implements Screen {
 		
 		//uncomment following line to see the game over image when starting your game
 		//showGameOver();
+		
+		initCow();
 	}
 	
+	private void initCow() {
+		cow = new Cow();
+		cow.setX( (stage.getWidth()-cow.getWidth())/2 );
+		stage.addActor(cow);
+	}
+
 	private Bomb createBombActor() {
 		Bomb bomb = new Bomb();
 
