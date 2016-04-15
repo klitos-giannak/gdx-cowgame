@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -29,6 +30,7 @@ public class GameScreen implements Screen {
 
 	//initialize a Sound. Mp3 file needs to be in the assets directory
 	private Sound moo = Gdx.audio.newSound(Gdx.files.internal("moo.mp3"));
+	private Sound boom = Gdx.audio.newSound(Gdx.files.internal("boom.mp3"));
 	private Timer.Task createBombsTask;
 	
 	public GameScreen() {
@@ -48,6 +50,17 @@ public class GameScreen implements Screen {
 		//delay 1 second to start
 		//generate 2 bombs per second
 		createBombsTask = new Timer().scheduleTask(addBombTask(), 1, 0.5f);
+	}
+	
+	private void finishGame() {
+		boom.play();
+		createBombsTask.cancel();
+		for(Actor actor : stage.getActors())
+			actor.clearActions();
+		cow.clearListeners();
+		
+		
+		showGameOver();
 	}
 	
 	private Timer.Task addBombTask(){
