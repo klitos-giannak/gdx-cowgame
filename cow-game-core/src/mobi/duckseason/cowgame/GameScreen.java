@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 public class GameScreen implements Screen {
@@ -27,6 +29,7 @@ public class GameScreen implements Screen {
 
 	//initialize a Sound. Mp3 file needs to be in the assets directory
 	private Sound moo = Gdx.audio.newSound(Gdx.files.internal("moo.mp3"));
+	private Timer.Task createBombsTask;
 	
 	public GameScreen() {
 		ScalingViewport v = new ScalingViewport(Scaling.stretch, WIDTH, HEIGHT);
@@ -40,6 +43,20 @@ public class GameScreen implements Screen {
 		//showGameOver();
 		
 		initCow();
+		
+		//initialize the timer that creates the bombs
+		//delay 1 second to start
+		//generate 2 bombs per second
+		createBombsTask = new Timer().scheduleTask(addBombTask(), 1, 0.5f);
+	}
+	
+	private Timer.Task addBombTask(){
+		return new Timer.Task() {
+			@Override
+			public void run() {
+				stage.addActor(createBombActor());
+			}
+		};
 	}
 	
 	private void initCow() {
