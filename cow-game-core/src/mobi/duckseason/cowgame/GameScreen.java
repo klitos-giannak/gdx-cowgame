@@ -7,12 +7,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
@@ -48,8 +50,33 @@ public class GameScreen implements Screen {
 		cow.addAction(createCowWelcomeAnim());
 		//play a sound with the animation
 		moo.play();
+		
+		//add a Listener to the cow
+		cow.addListener(createDragListener());
 	}
 
+	/** Create a Listener object that makes the cow respond to touch and drag events.
+	 * touchDown method keeps the offset at which the player touched (or moused-down) the cow
+	 * and drag method moves the cow along with the finger(or the mouse-cursor) on the X axis
+	 * @return the created DragListener object
+	 */
+	private DragListener createDragListener() {
+		return new DragListener(){
+			float touchedXOffset;
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				touchedXOffset = x;
+				return super.touchDown(event, x, y, pointer, button);
+			}
+			
+			@Override
+			public void drag(InputEvent event, float x, float y, int pointer) {
+				cow.moveBy(x - touchedXOffset, 0);				
+			}
+		};
+	}
+	
 	private SequenceAction createCowWelcomeAnim() {
 		SequenceAction sAction =  new SequenceAction();
 		
